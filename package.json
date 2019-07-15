@@ -1,0 +1,30 @@
+{
+  "name": "etokenapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "forever start server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/dpr-montpellier-tools/E-Token-API.git"
+  },
+  "author": "Mickaël Leclerc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/dpr-montpellier-tools/E-Token-API/issues"
+  },
+  "homepage": "https://gitlab.com/dpr-montpellier-tools/E-Token-API#README",
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "helmet": "^3.9.0",
+    "jwt-decode": "^2.2.0",
+    "mysql": "^2.15.0",
+    "node-fetch": "^2.0.0"
+  }
+}
