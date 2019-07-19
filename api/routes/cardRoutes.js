@@ -9,13 +9,15 @@
 'use strict';
 
 module.exports = function(app) {
-  var controller = require('../controllers/cardController');
+  const controller = require('../controllers/cardController');
 
   app.route('/card')
-    .get(controller.getAllCard);
+      .all(controller.checkPrivileges)
+      .get(controller.getAllCard);
 
   app.route('/card/:uid')
-    .get(controller.getCard)
-    .put(controller.addCard)
-    .delete(controller.delCard);
+      .get(controller.getCard)
+      .all(controller.checkPrivileges)
+      .put(controller.addCard)
+      .delete(controller.delCard);
 };

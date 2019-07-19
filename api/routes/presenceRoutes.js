@@ -9,11 +9,11 @@
 'use strict';
 
 module.exports = function(app) {
-  var controller = require('../controllers/presenceController');
+  const controller = require('../controllers/presenceController');
 
   app.route('/presence/:scolaryear/:codemodule/:codeinstance/:codeacti/:codeevent')
-    .all(controller.checkPrivileges)
-    .get(controller.getPresence)
-    .put(controller.addPresence)
-    .delete(controller.delPresence);
+      .all(controller.checkPrivileges)
+      .get(controller.getPresence)
+      .put(controller.addPresence)
+      .delete(controller.delPresence);
 };
