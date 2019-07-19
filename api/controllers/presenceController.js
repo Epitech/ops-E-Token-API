@@ -12,10 +12,21 @@ const Sequelize = require('sequelize');
 const jwt_decode = require('jwt-decode');
 const query = require('../database/handler');
 
+/**
+ * Concatenate params to a single string
+ * @param params
+ * @returns {*}
+ */
 function event_to_id(params) {
     return params.scolaryear + params.codemodule + params.codeinstance + params.codeacti + params.codeevent;
 }
 
+/**
+ * Check if user has read privilege of the module on the Intranet
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.checkPrivileges = function(req, res, next) {
     if (req.headers !== undefined && req.headers.authorization !== undefined) {
         fetch('https://intra.epitech.eu/module/' + req.params.scolaryear + '/' + req.params.codemodule + '/' + req.params.codeinstance + '?format=json', {headers: {'Cookie': 'user=' + req.headers.authorization.split(' ')[1]}})
@@ -39,6 +50,11 @@ exports.checkPrivileges = function(req, res, next) {
     }
 };
 
+/**
+ * Get presence of the activity
+ * @param req
+ * @param res
+ */
 exports.getPresence = function(req, res) {
     query('SELECT student_login AS login, student_present AS present FROM activities WHERE activity_name=?',
         [event_to_id(req.params)],
@@ -54,6 +70,11 @@ exports.getPresence = function(req, res) {
         });
 };
 
+/**
+ * Add a student presence on an activity
+ * @param req
+ * @param res
+ */
 exports.addPresence = function(req, res) {
     query('INSERT INTO activities (activity_name, student_login, student_present, query_date) VALUES (?, ?, ?, NOW()) ON DUPLICATE KEY UPDATE student_present=VALUES(student_present), query_date=VALUES(query_date)',
         [event_to_id(req.params), req.body.login, req.body.present],
@@ -65,6 +86,11 @@ exports.addPresence = function(req, res) {
         });
 };
 
+/**
+ * Remove an activity
+ * @param req
+ * @param res
+ */
 exports.delPresence = function(req, res) {
     query('DELETE FROM activities WHERE activity_name=?',
         [event_to_id(req.params)],

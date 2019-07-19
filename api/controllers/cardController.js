@@ -12,6 +12,12 @@ const Sequelize = require('sequelize');
 const jwt_decode = require('jwt-decode');
 const query = require('../database/handler');
 
+/**
+ * Check if user has write access to the database either by being in the enrolment_nfc or pedago group on the Intranet
+ * @param req
+ * @param res
+ * @param next
+ */
 exports.checkPrivileges = function(req, res, next) {
     if (req.headers !== undefined && req.headers.authorization !== undefined) {
         fetch('https://intra.epitech.eu/user/?format=json', {headers: {'Cookie': 'user=' + req.headers.authorization.split(' ')[1]}})
@@ -35,6 +41,11 @@ exports.checkPrivileges = function(req, res, next) {
     }
 };
 
+/**
+ * Send all card registered on the database by sending logins in an array
+ * @param req
+ * @param res
+ */
 exports.getAllCard = function(req, res) {
     query('SELECT login FROM user_corresp',
         [],
@@ -46,6 +57,11 @@ exports.getAllCard = function(req, res) {
         });
 };
 
+/**
+ * Send the login associated with the UID asked
+ * @param req
+ * @param res
+ */
 exports.getCard = function(req, res) {
     query('SELECT login FROM user_corresp WHERE uid=UNHEX(RPAD(?, 14, "0"))',
         [req.params.uid],
@@ -61,6 +77,11 @@ exports.getCard = function(req, res) {
         });
 };
 
+/**
+ * Add a new card to the database by associating the UID with the login
+ * @param req
+ * @param res
+ */
 exports.addCard = function(req, res) {
     query('INSERT INTO user_corresp (uid, login, last_modified) VALUES (UNHEX(RPAD(?, 14, "0")), ?, NOW()) ON DUPLICATE KEY UPDATE uid=VALUES(uid), login=VALUES(login), last_modified=VALUES(last_modified)',
         [req.params.uid, req.body.login],
@@ -72,6 +93,11 @@ exports.addCard = function(req, res) {
         });
 };
 
+/**
+ * Remove the card associated with the UID
+ * @param req
+ * @param res
+ */
 exports.delCard = function(req, res) {
     query('DELETE FROM user_corresp WHERE uid=UNHEX(RPAD(?, 14, "0"))',
         [req.params.uid],
