@@ -10,7 +10,7 @@
 
 const fs = require('fs');
 const database = require('./connection');
-const databaseConnected = new Promise(resolve => {
+let databaseConnected = new Promise(resolve => {
     let promises = [];
 
     database
