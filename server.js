@@ -72,7 +72,7 @@ database
           let path = '/etc/letsencrypt/live/whatsupdoc.epitech.eu/';
           https.createServer({key: fs.readFileSync(path + 'privkey.pem'), cert: fs.readFileSync(path + 'cert.pem'), ca: fs.readFileSync(path + 'chain.pem')}, app).listen(port);
         }
-      }, 1000);
+      }, 5000);
     })
     .catch(err => {
       console.error("Unable to connect to the database:", err);
