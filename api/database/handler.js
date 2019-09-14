@@ -10,48 +10,47 @@
 
 const fs = require('fs');
 const database = require('./connection');
-let databaseConnected = false
-let promises = [];
+let databaseConnected = new Promise(resolve => {
+    let promises = [];
 
-module.exports = function (sql, replacements, type, accept = null, reject = null) {
-    if (!databaseConnected) {
-        database
-            .authenticate()
-            .then(() => {
-                // Execute all .sql files
-                fs.readdir("../../sql/", (err, files) => {
-                    files.forEach(file => {
-                        fs.readFile("../../sql/" + file, (err, sql) => {
-                            promises.push(new Promise(resolve => {
-                                database.query(sql.toString()).then(() => {
-                                    resolve();
-                                });
-                            }));
-                        });
+    database
+        .authenticate()
+        .then(() => {
+            // Execute all .sql files
+            fs.readdir("../../sql/", (err, files) => {
+                files.forEach(file => {
+                    fs.readFile("../../sql/" + file, (err, sql) => {
+                        promises.push(new Promise(resolve => {
+                            database.query(sql.toString()).then(() => {
+                                resolve();
+                            });
+                        }));
                     });
                 });
-            })
-            .catch(err => {
-                console.error("Unable to connect to the database:", err);
-                process.exit(1);
             });
-        while (promises.length === 0) {
-            console.log('Waiting for database to ingest .sql')
-        }
-        databaseConnected = true;
-    }
-
-    Promise.all(promises);
-    database.query(sql, {replacements, type})
-        .then(function (result) {
-            if (accept !== null) {
-                accept(result);
-            }
+            Promise.all(promises);
+            resolve();
         })
-        .catch(function (error) {
-            console.error(error);
-            if (reject !== null) {
-                reject();
-            }
+        .catch(err => {
+            console.error("Unable to connect to the database:", err);
+            process.exit(1);
         });
+});
+
+module.exports = function (sql, replacements, type, accept = null, reject = null) {
+    databaseConnected
+        .then(() => {
+            database.query(sql, {replacements, type})
+                .then(function (result) {
+                    if (accept !== null) {
+                        accept(result);
+                    }
+                })
+                .catch(function (error) {
+                    console.error(error);
+                    if (reject !== null) {
+                        reject();
+                    }
+                });
+        })
 };
