@@ -9,11 +9,12 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [8.x, 10.x, 12.x]
+        node-version: [12.x]
 
     steps:
     - uses: mirromutth/mysql-action@v1.1
       with:
+        host port: 3800
         mysql database: 'etoken'
         mysql user: 'phpmyadmin'
         mysql password: 'root'
@@ -23,10 +24,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
+    - name: npm install and test
       run: |
         npm install
-        npm run build --if-present
         npm test
       env:
         CI: true
