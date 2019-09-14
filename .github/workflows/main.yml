@@ -19,6 +19,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: npm install and test
       run: |
+        mysql -uroot -h127.0.0.1 -proot -e 'CREATE DATABASE IF NOT EXISTS etoken;'
         npm install
         npm test
       env:
