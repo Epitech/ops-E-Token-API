@@ -10,7 +10,7 @@
 
 const fs = require('fs');
 const database = require('./connection');
-let databaseConnected = new Promise(resolve => {
+const databaseConnected = new Promise(resolve => {
     let promises = [];
 
     database
@@ -29,6 +29,7 @@ let databaseConnected = new Promise(resolve => {
                     });
                 });
             });
+            // Launch after 1 second warm-up to make sure SQL files are ingested
             setTimeout(() => {
                 Promise.all(promises);
                 resolve();
