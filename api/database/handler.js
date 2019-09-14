@@ -19,9 +19,9 @@ module.exports = function (sql, replacements, type, accept = null, reject = null
             .authenticate()
             .then(() => {
                 // Execute all .sql files
-                fs.readdir("./sql/", (err, files) => {
+                fs.readdir("../../sql/", (err, files) => {
                     files.forEach(file => {
-                        fs.readFile("./sql/" + file, (err, sql) => {
+                        fs.readFile("../../sql/" + file, (err, sql) => {
                             promises.push(new Promise(resolve => {
                                 database.query(sql.toString()).then(() => {
                                     resolve();
