@@ -35,6 +35,9 @@ module.exports = function (sql, replacements, type, accept = null, reject = null
                 console.error("Unable to connect to the database:", err);
                 process.exit(1);
             });
+        while (promises.length === 0) {
+            console.log('Waiting for database to ingest .sql')
+        }
         databaseConnected = true;
     }
 
