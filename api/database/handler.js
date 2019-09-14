@@ -20,6 +20,7 @@ let databaseConnected = new Promise(resolve => {
             fs.readdir("../../sql/", (err, files) => {
                 files.forEach(file => {
                     fs.readFile("../../sql/" + file, (err, sql) => {
+                        console.log('Ingesting ' + file)
                         promises.push(new Promise(resolve => {
                             database.query(sql.toString()).then(() => {
                                 resolve();
