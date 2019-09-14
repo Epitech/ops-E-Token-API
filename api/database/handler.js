@@ -8,19 +8,53 @@
 
 'use strict';
 
+const fs = require('fs');
 const database = require('./connection');
+let databaseConnected = new Promise(resolve => {
+    let promises = [];
+
+    database
+        .authenticate()
+        .then(() => {
+            // Execute all .sql files
+            fs.readdir("./sql/", (err, files) => {
+                files.forEach(file => {
+                    fs.readFile("./sql/" + file, (err, sql) => {
+                        console.log('Ingesting ' + file)
+                        promises.push(new Promise(resolve => {
+                            database.query(sql.toString()).then(() => {
+                                resolve();
+                            });
+                        }));
+                    });
+                });
+            });
+            // Launch after 1 second warm-up to make sure SQL files are ingested
+            setTimeout(() => {
+                Promise.all(promises);
+                resolve();
+            }, 1000)
+        })
+        .catch(err => {
+            console.error("Unable to connect to the database:", err);
+            process.exit(1);
+        });
+});
 
 module.exports = function (sql, replacements, type, accept = null, reject = null) {
-    database.query(sql, {replacements, type})
-        .then(function (result) {
-            if (accept !== null) {
-                accept(result);
-            }
+    databaseConnected
+        .then(() => {
+            database.query(sql, {replacements, type})
+                .then(function (result) {
+                    if (accept !== null) {
+                        accept(result);
+                    }
+                })
+                .catch(function (error) {
+                    console.error(error);
+                    if (reject !== null) {
+                        reject();
+                    }
+                });
         })
-        .catch(function (error) {
-            console.error(error);
-            if (reject !== null) {
-                reject();
-            }
-        });
 };
