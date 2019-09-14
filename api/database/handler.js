@@ -17,9 +17,9 @@ let databaseConnected = new Promise(resolve => {
         .authenticate()
         .then(() => {
             // Execute all .sql files
-            fs.readdir("../../sql/", (err, files) => {
+            fs.readdir("./sql/", (err, files) => {
                 files.forEach(file => {
-                    fs.readFile("../../sql/" + file, (err, sql) => {
+                    fs.readFile("./sql/" + file, (err, sql) => {
                         console.log('Ingesting ' + file)
                         promises.push(new Promise(resolve => {
                             database.query(sql.toString()).then(() => {
