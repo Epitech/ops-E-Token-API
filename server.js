@@ -20,29 +20,6 @@ var express = require('express'),
     jwt_decode = require('jwt-decode'),
     database = require('./api/database/connection');
 
-app.use(helmet());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(function(req, res, next) {
-  let now = new Date();
-  let date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-  if (req.headers !== undefined && req.headers.authorization !== undefined) {
-    try {
-      console.log(date, jwt_decode(req.headers.authorization.split(' ')[1]).login, req.connection.remoteAddress, req.method, req.originalUrl);
-      next();
-    } catch (e) {
-      console.log(date, 'undefined', req.connection.remoteAddress, req.method, req.originalUrl);
-      res.sendStatus(400);
-    }
-  } else {
-    console.log(date, req.connection.remoteAddress, req.method, req.originalUrl);
-    next();
-  }
-});
-
-require('./api/routes/cardRoutes')(app);
-require('./api/routes/presenceRoutes')(app);
-
 database
     .authenticate()
     .then(() => {
@@ -78,5 +55,28 @@ database
       console.error("Unable to connect to the database:", err);
       process.exit(1);
     });
+
+app.use(helmet());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(function(req, res, next) {
+  let now = new Date();
+  let date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+  if (req.headers !== undefined && req.headers.authorization !== undefined) {
+    try {
+      console.log(date, jwt_decode(req.headers.authorization.split(' ')[1]).login, req.connection.remoteAddress, req.method, req.originalUrl);
+      next();
+    } catch (e) {
+      console.log(date, 'undefined', req.connection.remoteAddress, req.method, req.originalUrl);
+      res.sendStatus(400);
+    }
+  } else {
+    console.log(date, req.connection.remoteAddress, req.method, req.originalUrl);
+    next();
+  }
+});
+
+require('./api/routes/cardRoutes')(app);
+require('./api/routes/presenceRoutes')(app);
 
 module.exports = app;
