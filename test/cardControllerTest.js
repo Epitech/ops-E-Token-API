@@ -20,6 +20,10 @@ chai.use(chaiHttp);
 chai.use(chaiFetchMock);
 
 describe('card', function () {
+    before(function() {
+        chai.request(server)
+    });
+
     describe('unauthorized user', function () {
         it('should get Wrong Request response', function (done) {
             chai.request(server)

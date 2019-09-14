@@ -59,7 +59,6 @@ database
 
       // Launch server after 1 second warm-up to make sure SQL files are executed
       setTimeout(() => {
-        while (promises.length === 0) {}
         Promise.all(promises);
 
         console.log('============== STARTING SERVER ==============');

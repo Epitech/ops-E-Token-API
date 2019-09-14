@@ -20,6 +20,10 @@ chai.use(chaiHttp);
 chai.use(chaiFetchMock);
 
 describe('presence', function () {
+    before(function() {
+        chai.request(server)
+    });
+
     describe('unauthorized user', function () {
         it('should return unauthorized on get presence', function (done) {
             chai.request(server)
