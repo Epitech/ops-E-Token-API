@@ -29,6 +29,9 @@ let databaseConnected = new Promise(resolve => {
                     });
                 });
             });
+            while (promises.length !== 3) {
+                console.log('Waiting for .sql ingestion to be done: ' + promises.length + '/3')
+            }
             Promise.all(promises);
             resolve();
         })
