@@ -22,6 +22,7 @@ chai.use(chaiFetchMock);
 describe('card', function () {
     before(function() {
         chai.request(server)
+            .get('/')
     });
 
     describe('unauthorized user', function () {
