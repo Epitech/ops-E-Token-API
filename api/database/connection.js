@@ -10,4 +10,4 @@
 
 const Sequelize = require("sequelize");
 
-module.exports = new Sequelize("mysql://" + (process.env.DATABASE_USER || "phpmyadmin") + ":" + (process.env.DATABASE_PASSWORD || "root") + "@" + (process.env.DATABASE_ADDR || "localhost") + ":" + (process.env.DATABASE_PORT || "3306") + "/" + (process.env.DATABASE_NAME || "etoken"));
+module.exports = new Sequelize("mysql://" + (process.env.DATABASE_USER || "root") + ":" + (process.env.DATABASE_PASSWORD || "root") + "@" + (process.env.DATABASE_ADDR || "localhost") + ":" + (process.env.DATABASE_PORT || "3306") + "/" + (process.env.DATABASE_NAME || "etoken"));
