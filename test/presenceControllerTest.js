@@ -20,12 +20,12 @@ chai.use(chaiHttp);
 chai.use(chaiFetchMock);
 
 describe('presence', function () {
-    before(function() {
-        chai.request(server)
-            .get('/')
-    });
-
     describe('unauthorized user', function () {
+        before(function() {
+            chai.request(server)
+                .get('/')
+        });
+
         it('should return unauthorized on get presence', function (done) {
             chai.request(server)
                 .get('/presence/a/b/c/d/e')
@@ -57,6 +57,8 @@ describe('presence', function () {
 
     describe('authorized user', function () {
         before(function () {
+            chai.request(server)
+                .get('/')
             fetchMock.get('https://intra.epitech.eu/user/?format=json', {
                 groups: [{title: 'Pedago', name: 'pedago', count: 1}]
             });
