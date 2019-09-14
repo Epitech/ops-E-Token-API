@@ -24,6 +24,7 @@ describe('card', function () {
         before(function() {
             chai.request(server)
                 .get('/')
+            console.log('HERE')
         });
 
         it('should get Wrong Request response', function (done) {
