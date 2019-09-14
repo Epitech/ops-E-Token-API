@@ -8,6 +8,7 @@
 
 'use strict';
 
+const fs = require('fs');
 const database = require('./connection');
 let databaseConnected = false
 let promises = [];

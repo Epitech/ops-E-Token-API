@@ -17,8 +17,7 @@ var express = require('express'),
     fs = require('fs'),
     https = require('https'),
     helmet = require('helmet'),
-    jwt_decode = require('jwt-decode'),
-    database = require('./api/database/connection');
+    jwt_decode = require('jwt-decode');
 
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
