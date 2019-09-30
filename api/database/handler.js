@@ -31,8 +31,10 @@ let databaseConnected = new Promise(resolve => {
             });
             // Launch after 1 second warm-up to make sure SQL files are ingested
             setTimeout(() => {
-                Promise.all(promises);
-                resolve();
+                Promise.all(promises)
+                    .then(function() {
+                        resolve();
+                    })
             }, 1000)
         })
         .catch(err => {
