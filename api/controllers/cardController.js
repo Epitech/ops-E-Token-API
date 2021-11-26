@@ -20,10 +20,10 @@ const query = require('../database/handler');
  */
 exports.checkPrivileges = function(req, res, next) {
     if (req.headers !== undefined && req.headers.authorization !== undefined) {
-        fetch('https://intra.epitech.eu/user/?format=json', {headers: {'Cookie': 'user=' + req.headers.authorization.split(' ')[1]}})
+        fetch('https://intra.epitech.eu/group/pedago/member?format=json&nolimit=1', {headers: {'Cookie': 'user=' + req.headers.authorization.split(' ')[1]}})
             .then((response) => response.json())
             .then((response) => {
-                if (response.groups !== undefined && response.groups.some(function(el) {return ['enrolment_nfc', 'pedago'].indexOf(el.name) !== -1})) {
+                if (response.some(function(el) {return el.login == jwt_decode(req.headers.authorization.split(' ')[1]).login})) {
                     query('INSERT INTO user_corresp_log (action, uid, student, login, query_date) VALUES (?, UNHEX(RPAD(?, 14, "0")), ?, ?, NOW())',
                         [req.method, req.params.uid, req.body.login, jwt_decode(req.headers.authorization.split(' ')[1]).login],
                         Sequelize.QueryTypes.INSERT,
