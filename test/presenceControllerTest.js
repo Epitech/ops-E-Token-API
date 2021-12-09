@@ -52,9 +52,9 @@ describe('presence', function () {
 
     describe('authorized user', function () {
         before(function () {
-            fetchMock.get('https://intra.epitech.eu/user/?format=json', {
-                groups: [{title: 'Pedago', name: 'pedago', count: 1}]
-            });
+            fetchMock.get('https://intra.epitech.eu/group/pedago/member?format=json&nolimit=1', [
+                {'type': 'user', 'login': 'test.test@epitech.eu'}
+            ]);
             fetchMock.get('https://intra.epitech.eu/module/a/b/c?format=json', {
                 rights: ['prof_inst']
             });
