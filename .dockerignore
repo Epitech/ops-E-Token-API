@@ -1,0 +1,10 @@
+**/.git
+**/.gitignore
+**/.vscode
+**/.github
+README.md
+tests/
+letsencrypt/
+Dockerfile
+docker-compose.yml
+db/

@@ -3,7 +3,7 @@
   "main": "index.js",
   "scripts": {
     "test": "DEBUG=1 PORT=5000 mocha --exit",
-    "start": "forever start server.js"
+    "start": "node  server.js"
   },
   "author": "Mickaël Leclerc",
   "devDependencies": {

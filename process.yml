@@ -1,0 +1,5 @@
+apps:
+    - name: etoken-api
+      script: ./server.js
+      exec_mode: cluster
+      instances: max
