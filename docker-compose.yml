@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  mysqldb:
+    image: mysql:8.0
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQLDB_DATABASE
+    ports:
+      - $MYSQLDB_PORT:3306
+    volumes:
+      - db:/var/lib/mysql
+  app:
+    depends_on:
+      - mysqldb
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - $PORT:8080
+    environment:
+      - DATABASE_ADDR=mysqldb
+      - DATABASE_USER=$MYSQLDB_USER
+      - DATABASE_PASSWORD=$MYSQLDB_ROOT_PASSWORD
+      - DATABASE_NAME=$MYSQLDB_DATABASE
+      - DATABASE_PORT=3306
+    stdin_open: true
+    tty: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.etoken_api.rule=Host(`${TRAEFIK_HOST}`)"
+      - "traefik.http.routers.etoken_api.entrypoints=websecure"
+      - "traefik.http.routers.etoken_api.tls.certresolver=myresolver"
+      - "traefik.http.routers.etoken_api.middlewares=SecHeader@file"
+
+volumes: 
+  db:

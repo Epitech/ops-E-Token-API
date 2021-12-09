@@ -10,13 +10,13 @@
 require('dotenv').config();
 
 require('isomorphic-fetch');
+require('dotenv').config();
 
 var express = require('express'),
     app = express(),
-    port = process.env.PORT || 443,
+    port = 8080,
     bodyParser = require('body-parser'),
     fs = require('fs'),
-    https = require('https'),
     helmet = require('helmet'),
     jwt_decode = require('jwt-decode');
 
@@ -41,13 +41,8 @@ app.use(function(req, res, next) {
 });
 
 console.log('============== STARTING SERVER ==============');
-if (process.env.DEBUG) {
-  var http = require('http');
-  http.createServer(app).listen(port);
-} else {
-  let path = '/etc/letsencrypt/live/whatsupdoc.epitech.eu/';
-  https.createServer({key: fs.readFileSync(path + 'privkey.pem'), cert: fs.readFileSync(path + 'cert.pem'), ca: fs.readFileSync(path + 'chain.pem')}, app).listen(port);
-}
+var http = require('http');
+http.createServer(app).listen(port);
 
 require('./api/routes/cardRoutes')(app);
 require('./api/routes/presenceRoutes')(app);
