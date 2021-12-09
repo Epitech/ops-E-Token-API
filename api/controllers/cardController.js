@@ -36,7 +36,11 @@ exports.checkPrivileges = function(req, res, next) {
                     res.sendStatus(403);
                 }
             });
-    } else {
+    }
+    else if (process.env !== undefined && process.env.API_KEY !== undefined && process.env.API_KEY.split(",").includes(req.headers['x-key'])) {
+        next();
+    }
+    else {
         res.sendStatus(401);
     }
 };
