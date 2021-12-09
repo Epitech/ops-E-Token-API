@@ -20,6 +20,8 @@ chai.use(chaiHttp);
 chai.use(chaiFetchMock);
 
 describe('card', function () {
+    process.env.API_KEY = "nu8Z27p6ZwVT,XQr6x55UF3et,m7hCZxgW54J7"
+
     describe('unauthorized user', function () {
         it('should get Wrong Request response', function (done) {
             chai.request(server)
@@ -47,6 +49,38 @@ describe('card', function () {
                 .send({login: 'test.test@epitech.eu'})
                 .end((err, res) => {
                     res.should.have.status(401);
+                    done();
+                });
+        });
+
+        it('should return unauthorized on add new card with fake api key', function (done) {
+            chai.request(server)
+                .put('/card/15c4315a094f80')
+                .set('x-key', 'testwithfakekey')
+                .send({login: 'test.key.fake@epitech.eu'})
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    done();
+                });
+        });
+
+        it('should return unauthorized on add new card without  api key', function (done) {
+            chai.request(server)
+                .put('/card/15c4315a094f80')
+                .send({login: 'test.without.key@epitech.eu'})
+                .end((err, res) => {
+                    res.should.have.status(401);
+                    done();
+                });
+        });
+
+        it('should return unauthorized on add new card with api good key', function (done) {
+            chai.request(server)
+                .put('/card/15c4315a094f80')
+                .set('x-key', 'XQr6x55UF3et')
+                .send({login: 'test.key.good@epitech.eu'})
+                .end((err, res) => {
+                    res.should.have.status(200);
                     done();
                 });
         });
@@ -124,9 +158,28 @@ describe('card', function () {
                                 .end((err, res) => {
                                     res.should.have.status(200);
                                     res.body.should.be.a('array');
-                                    res.body.should.be.eql(['test.test@epitech.eu', 'test1.test@epitech.eu']);
+                                    res.body.should.be.eql(['test.key.good@epitech.eu', 'test.test@epitech.eu', 'test1.test@epitech.eu']);
                                     done();
                                 });
+                        });
+                });
+        });
+
+        it('should remove a card with api key', function (done) {
+            chai.request(server)
+                .delete('/card/15c4315a094f80')
+                .set({'x-key': 'm7hCZxgW54J7'})
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.be.eql({message: 'Deleted card'});
+                    chai.request(server)
+                        .get('/card/15c4315a094f80')
+                        .end((err, res) => {
+                            res.should.have.status(200);
+                            res.body.should.be.a('object');
+                            res.body.should.be.eql({error: 'Wrong Request'});
+                            done();
                         });
                 });
         });

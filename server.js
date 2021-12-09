@@ -7,6 +7,7 @@
  */
 
 'use strict';
+require('dotenv').config();
 
 require('isomorphic-fetch');
 
