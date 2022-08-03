@@ -21,7 +21,7 @@ jobs:
       run: |
         sudo systemctl start mysql.service
         mysql -uroot -h127.0.0.1 -proot -e 'CREATE DATABASE IF NOT EXISTS etoken;'
-        npm install
+        npm ci
         npm test
       env:
         CI: true
