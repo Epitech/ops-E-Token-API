@@ -34,11 +34,11 @@ exports.checkPrivileges = function(req, res, next) {
             .then((response) => {
                 if (response.rights !== undefined && response.rights !== null && (response.rights.indexOf('prof_inst') > -1 || response.rights.indexOf('assistant') > -1)) {
                     query('INSERT INTO activities_log (activity_name, activity_action, activity_action_student_login, activity_action_student_present, activity_action_login, query_date) VALUES (?, ?, ?, ?, ?, NOW())',
-                        [event_to_id(req.params), req.method, req.body.login, req.body.present, jwt_decode(req.headers.authorization.split(' ')[1]).login],
+                        [event_to_id(req.params), req.method, req.body.login || null, req.body.present || null, jwt_decode(req.headers.authorization.split(' ')[1]).login],
                         Sequelize.QueryTypes.INSERT,
                         function () {
                             next();
-                        }, function () {
+                        }, function (err) {
                             res.sendStatus(500);
                         });
                 } else {
