@@ -10,14 +10,13 @@
 
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let chaiFetchMock = require('chai-fetch-mock');
 let fetchMock = require('fetch-mock');
 let server = require('../server');
 let should = chai.should();
 const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRlc3QudGVzdEBlcGl0ZWNoLmV1In0.gje05RjciNB42ZGcAnFZBoVxbeTh38nvwCbdgUTXR6Q';
 
 chai.use(chaiHttp);
-chai.use(chaiFetchMock);
+chai.use(require('./middleware'));
 
 describe('card', function () {
     process.env.API_KEY = "nu8Z27p6ZwVT,XQr6x55UF3et,m7hCZxgW54J7"
