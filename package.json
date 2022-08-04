@@ -8,7 +8,6 @@
   "author": "Mickaël Leclerc",
   "devDependencies": {
     "chai": "^4.3.4",
-    "chai-fetch-mock": "^3.0.0",
     "chai-http": "^4.3.0",
     "fetch-mock": "^9.11.0",
     "mocha": "^9.1.3",
