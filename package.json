@@ -20,7 +20,7 @@
     "isomorphic-fetch": "^3.0.0",
     "jwt-decode": "^3.1.2",
     "mysql2": "^3.6.0",
-    "node-fetch": "^2.6.11",
+    "node-fetch": "^3.3.2",
     "sequelize": "^6.35.1"
   }
 }
