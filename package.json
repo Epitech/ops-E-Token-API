@@ -7,7 +7,7 @@
   },
   "author": "Mickaël Leclerc",
   "devDependencies": {
-    "chai": "^4.3.7",
+    "chai": "^4.3.8",
     "chai-http": "^4.3.0",
     "fetch-mock": "^9.11.0",
     "mocha": "^10.2.0",
@@ -19,8 +19,8 @@
     "helmet": "^7.0.0",
     "isomorphic-fetch": "^3.0.0",
     "jwt-decode": "^3.1.2",
-    "mysql2": "^3.3.5",
+    "mysql2": "^3.6.0",
     "node-fetch": "^2.6.11",
-    "sequelize": "^6.32.0"
+    "sequelize": "^6.35.1"
   }
 }

@@ -61,7 +61,7 @@ exports.getPresence = function(req, res) {
         Sequelize.QueryTypes.SELECT,
         function (results) {
             if (results.length === 0) {
-                res.json({'students': null});
+                res.json({'students': []});
             } else {
                 res.json({'students': results});
             }

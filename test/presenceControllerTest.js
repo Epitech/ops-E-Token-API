@@ -66,7 +66,7 @@ describe('presence', function () {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.should.be.eql({students: null});
+                    res.body.should.be.eql({students: []});
                     done();
                 });
         });
@@ -106,7 +106,7 @@ describe('presence', function () {
                         .end((err, res) => {
                             res.should.have.status(200);
                             res.body.should.be.a('object');
-                            res.body.should.be.eql({students: null});
+                            res.body.should.be.eql({students: []});
                             done();
                         });
                 });
