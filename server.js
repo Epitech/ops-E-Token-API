@@ -9,7 +9,7 @@
 'use strict';
 require('dotenv').config();
 
-require('isomorphic-fetch');
+require('node-fetch');
 require('dotenv').config();
 
 var express = require('express'),
