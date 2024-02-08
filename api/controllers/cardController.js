@@ -23,9 +23,9 @@ exports.checkPrivileges = function(req, res, next) {
         fetch('https://intra.epitech.eu/group/pedago/member?format=json&nolimit=1', {headers: {'Cookie': 'user=' + req.headers.authorization.split(' ')[1]}})
             .then((response) => response.json())
             .then((response) => {
-                if (response.some(function(el) {return el.login == jwt_decode(req.headers.authorization.split(' ')[1]).login})) {
+                if (response.some(function(el) {return el.login == jwt_decode.jwtDecode(req.headers.authorization.split(' ')[1]).login})) {
                     query('INSERT INTO user_corresp_log (action, uid, student, login, query_date) VALUES (?, UNHEX(RPAD(?, 14, "0")), ?, ?, NOW())',
-                        [req.method, req.params.uid || null, req.body.login || null, jwt_decode(req.headers.authorization.split(' ')[1]).login],
+                        [req.method, req.params.uid || null, req.body.login || null, jwt_decode.jwtDecode(req.headers.authorization.split(' ')[1]).login],
                         Sequelize.QueryTypes.INSERT,
                         function () {
                             next();
