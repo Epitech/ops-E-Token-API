@@ -8,20 +8,19 @@
 
 'use strict';
 
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let fetchMock = require('fetch-mock');
-let server = require('../server');
-let should = chai.should();
+import { use, request } from 'chai';
+import chaiHttp from 'chai-http';
+import { get, restore } from 'fetch-mock';
+import server from '../server';
 const mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6InRlc3QudGVzdEBlcGl0ZWNoLmV1In0.gje05RjciNB42ZGcAnFZBoVxbeTh38nvwCbdgUTXR6Q';
 
-chai.use(chaiHttp);
-chai.use(require('./middleware'));
+use(chaiHttp);
+use(require('./middleware'));
 
 describe('presence', function () {
     describe('unauthorized user', function () {
         it('should return unauthorized on get presence', function (done) {
-            chai.request(server)
+            request(server)
                 .get('/presence/a/b/c/d/e')
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -30,7 +29,7 @@ describe('presence', function () {
         });
 
         it('should return unauthorized on add new card', function (done) {
-            chai.request(server)
+            request(server)
                 .put('/presence/a/b/c/d/e')
                 .send({login: 'test.test@epitech.eu', present: 'present'})
                 .end((err, res) => {
@@ -40,7 +39,7 @@ describe('presence', function () {
         });
 
         it('should return unauthorized on delete presence', function (done) {
-            chai.request(server)
+            request(server)
                 .delete('/presence/a/b/c/d/e')
                 .end((err, res) => {
                     res.should.have.status(401);
@@ -51,16 +50,16 @@ describe('presence', function () {
 
     describe('authorized user', function () {
         before(function () {
-            fetchMock.get('https://intra.epitech.eu/group/pedago/member?format=json&nolimit=1', [
+            get('https://intra.epitech.eu/group/pedago/member?format=json&nolimit=1', [
                 {'type': 'user', 'login': 'test.test@epitech.eu'}
             ]);
-            fetchMock.get('https://intra.epitech.eu/module/a/b/c?format=json', {
+            get('https://intra.epitech.eu/module/a/b/c?format=json', {
                 rights: ['prof_inst']
             });
         });
 
         it('should return null students', function (done) {
-            chai.request(server)
+            request(server)
                 .get('/presence/a/b/c/d/e')
                 .set({'Authorization': 'Bearer ' + mockToken})
                 .end((err, res) => {
@@ -72,7 +71,7 @@ describe('presence', function () {
         });
 
         it('should add student as present', function (done) {
-            chai.request(server)
+            request(server)
                 .put('/presence/a/b/c/d/e')
                 .set({'Authorization': 'Bearer ' + mockToken})
                 .send({login: 'test.test@epitech.eu', present: 'present'})
@@ -80,7 +79,7 @@ describe('presence', function () {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.be.eql({message: 'Added student'});
-                    chai.request(server)
+                    request(server)
                         .get('/presence/a/b/c/d/e')
                         .set({'Authorization': 'Bearer ' + mockToken})
                         .end((err, res) => {
@@ -93,14 +92,14 @@ describe('presence', function () {
         });
 
         it('should remove activity', function (done) {
-            chai.request(server)
+            request(server)
                 .delete('/presence/a/b/c/d/e')
                 .set({'Authorization': 'Bearer ' + mockToken})
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.be.eql({message: 'Removed activity'});
-                    chai.request(server)
+                    request(server)
                         .get('/presence/a/b/c/d/e')
                         .set({'Authorization': 'Bearer ' + mockToken})
                         .end((err, res) => {
@@ -112,6 +111,6 @@ describe('presence', function () {
                 });
         });
 
-        after(() => fetchMock.restore());
+        after(() => restore());
     });
 });

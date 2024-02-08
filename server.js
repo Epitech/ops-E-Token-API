@@ -8,25 +8,24 @@
 
 'use strict';
 
-require('node-fetch');
-require('dotenv').config();
+import 'dotenv/config'
+import express from 'express';
+import { urlencoded, json } from 'body-parser';
+import helmet from 'helmet';
+import { jwtDecode } from 'jwt-decode';
 
-var express = require('express'),
-    app = express(),
-    port = 8080,
-    bodyParser = require('body-parser'),
-    helmet = require('helmet'),
-    jwt_decode = require('jwt-decode');
+var app = express();
+var port = 8080;
 
 app.use(helmet());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(urlencoded({ extended: true }));
+app.use(json());
 app.use(function(req, res, next) {
   let now = new Date();
   let date = now.getDate() + '-' + (now.getMonth() + 1) + '-' + now.getFullYear() + '/' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
   if (req.headers !== undefined && req.headers.authorization !== undefined) {
     try {
-      console.log(date, jwt_decode.jwtDecode(req.headers.authorization.split(' ')[1]).login, req.socket.remoteAddress, req.method, req.originalUrl);
+      console.log(date, jwtDecode(req.headers.authorization.split(' ')[1]).login, req.socket.remoteAddress, req.method, req.originalUrl);
       next();
     } catch (e) {
       console.log(date, 'undefined', req.socket.remoteAddress, req.method, req.originalUrl);
@@ -39,10 +38,10 @@ app.use(function(req, res, next) {
 });
 
 console.log('============== STARTING SERVER ==============');
-var http = require('http');
-http.createServer(app).listen(port);
+import { createServer } from 'http';
+createServer(app).listen(port);
 
-require('./api/routes/cardRoutes')(app);
-require('./api/routes/presenceRoutes')(app);
+require('./api/routes/cardRoutes').default(app);
+require('./api/routes/presenceRoutes').default(app);
 
-module.exports = app;
+export default app;

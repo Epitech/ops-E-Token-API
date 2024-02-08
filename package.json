@@ -1,6 +1,7 @@
 {
   "name": "etokenapi",
-  "main": "index.js",
+  "type": "module",
+  "exports": "./server.js",
   "scripts": {
     "test": "DEBUG=1 PORT=5000 mocha --exit",
     "start": "node  server.js"
@@ -19,7 +20,7 @@
     "helmet": "^7.1.0",
     "jwt-decode": "^4.0.0",
     "mysql2": "^3.9.1",
-    "node-fetch": "^2.7.0",
+    "node-fetch": "^3.3.2",
     "sequelize": "^6.35.2"
   }
 }

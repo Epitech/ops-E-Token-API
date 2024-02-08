@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = (chai, utils) => {
+export default (chai, utils) => {
   const Assertion = chai.Assertion;
   function withFlagCheck(callback) {
     return function (_super) {

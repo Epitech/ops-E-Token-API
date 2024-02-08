@@ -8,8 +8,8 @@
 
 'use strict';
 
-const fs = require('fs');
-const database = require('./connection');
+import { readdir, readFile } from 'fs';
+import database from './connection';
 let databaseConnected = new Promise(resolve => {
     let promises = [];
 
@@ -17,9 +17,9 @@ let databaseConnected = new Promise(resolve => {
         .authenticate()
         .then(() => {
             // Execute all .sql files
-            fs.readdir("./sql/", (err, files) => {
+            readdir("./sql/", (err, files) => {
                 files.forEach(file => {
-                    fs.readFile("./sql/" + file, (err, sql) => {
+                    readFile("./sql/" + file, (err, sql) => {
                         console.log('Ingesting ' + file)
                         promises.push(new Promise(resolve => {
                             database.query(sql.toString()).then(() => {
@@ -43,7 +43,7 @@ let databaseConnected = new Promise(resolve => {
         });
 });
 
-module.exports = function (sql, replacements, type, accept = null, reject = null) {
+export default function (sql, replacements, type, accept = null, reject = null) {
     databaseConnected
         .then(() => {
             database.query(sql, {replacements, type})

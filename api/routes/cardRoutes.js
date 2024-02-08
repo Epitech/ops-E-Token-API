@@ -8,7 +8,7 @@
 
 'use strict';
 
-module.exports = function(app) {
+export default function(app) {
   const controller = require('../controllers/cardController');
 
   app.route('/card')
