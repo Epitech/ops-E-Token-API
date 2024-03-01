@@ -11,7 +11,7 @@
     "chai-http": "^4.4.0",
     "fetch-mock": "^9.11.0",
     "mocha": "^10.2.0",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.1.0"
   },
   "dependencies": {
     "dotenv": "^16.4.1",
